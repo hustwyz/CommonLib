@@ -1,10 +1,14 @@
 package im.wyz.common.http;
 
-import im.wyz.common.Config;
 import im.wyz.common.R;
+import im.wyz.common.utils.FileUtil;
+import im.wyz.common.utils.Log;
 import im.wyz.common.utils.Util;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
@@ -29,17 +33,15 @@ import javax.net.ssl.X509TrustManager;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 
 /**
- * http request
+ * 网络请求的类
  * 
  * @author wyz
  * 
  */
 public class HttpRequest {
-
-	private static final String TAG = "HttpRequest";
 
 	public static final int OK = 200;
 
@@ -51,21 +53,22 @@ public class HttpRequest {
 
 	public static final int READ_TIMEOUT = 20000;
 
-	public Context context;
+	public Context mContext;
 
-	/**
-	 * http head
-	 */
 	private Bundle heads;
+
+	private boolean isCancelled = false;
+
+	private Log log = Util.getLog(getClass());
 
 	public HttpRequest(Context context) {
 		super();
-		this.context = context;
+		this.mContext = context;
 		heads = new Bundle();
 	}
 
 	/**
-	 * add http head
+	 * 添加请求头部
 	 * 
 	 * @param key
 	 * @param value
@@ -78,11 +81,46 @@ public class HttpRequest {
 	}
 
 	/**
-	 * http request
+	 * 清除某一个头部
+	 * 
+	 * @param key
+	 */
+	public void removeHead(String key) {
+		heads.remove(key);
+	}
+
+	/**
+	 * 清除所有请求头部
+	 */
+	public void removeAllHead() {
+		heads.clear();
+	}
+
+	/**
+	 * 取消请求
+	 */
+	public void cancel() {
+		isCancelled = true;
+	}
+
+	/**
+	 * 是否已取消
+	 * 
+	 * @return
+	 */
+	public boolean isCancelled() {
+		return isCancelled;
+	}
+
+	/**
+	 * 发起请求
 	 * 
 	 * @param url
+	 *            请求地址
 	 * @param method
+	 *            请求的方法
 	 * @param params
+	 *            请求的参数
 	 * @param files
 	 * @return
 	 * @throws Exception
@@ -97,11 +135,8 @@ public class HttpRequest {
 		}
 		HttpURLConnection conn;
 		conn = openURLConnect(url);
-		if (Config.DEBUG) {
-			Log.i(TAG, "URL=" + url);
-			Log.i(TAG, "Method=" + method);
-		}
-
+		log.d("URL:" + url);
+		log.d("Method:" + method);
 		conn.setConnectTimeout(CONNECT_TIMEOUT);
 		conn.setReadTimeout(READ_TIMEOUT);
 		conn.setDoInput(true);
@@ -111,9 +146,7 @@ public class HttpRequest {
 				String name = i.next();
 				String value = heads.getString(name);
 				conn.setRequestProperty(name, value);
-				if (Config.DEBUG) {
-					Log.i(TAG, "Head:name=" + name + ";value=" + value);
-				}
+				log.d("Head:name=" + name + ";value=" + value);
 			}
 		}
 		if (!method.equals("GET")) {
@@ -131,11 +164,11 @@ public class HttpRequest {
 		if (statusCode == OK) {
 			return res;
 		} else if (statusCode >= HttpRequest.SERVER_ERROR) {
-			throw new SecretLisaException(context.getString(
+			throw new SecretLisaException(mContext.getString(
 					R.string.http_error_server_error,
 					SecretLisaException.NETWORK_SERVER_ERROR));
 		} else {
-			throw new SecretLisaException(context.getString(
+			throw new SecretLisaException(mContext.getString(
 					R.string.http_error_unknown,
 					SecretLisaException.NETWORK_UNKNOWN));
 		}
@@ -143,7 +176,34 @@ public class HttpRequest {
 	}
 
 	/**
-	 * upload form
+	 * 下载文件
+	 * 
+	 * @param url
+	 *            下载地址
+	 * @param params
+	 *            请求参数
+	 * @param downloadListener
+	 *            下载回调
+	 * @param filePath
+	 *            文件下载的目录
+	 * @param fileName
+	 *            下载的文件名
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean download(String url, Bundle params,
+			DownloadListener downloadListener, final String filePath,
+			final String fileName) throws Exception {
+		isCancelled = false;
+		Response response = httpRequest(url, "GET", params, null);
+		HttpURLConnection conn = response.getCon();
+		int contentLength = conn.getContentLength();
+		return write2File(filePath, fileName, conn.getInputStream(),
+				contentLength, downloadListener);
+	}
+
+	/**
+	 * 上传表单
 	 * 
 	 * @param con
 	 * @param parameters
@@ -194,28 +254,86 @@ public class HttpRequest {
 		// 结束标志
 		byte[] endData = ("\r\n" + boundary + "--\r\n").getBytes();
 		os.write(endData);
-
 		os.flush();
 		os.close();
 	}
 
 	/**
-	 * open http connection
+	 * 写入到文件中
 	 * 
-	 * @param url
-	 * @return
-	 * @throws MalformedURLException
+	 * @param handler
+	 * @param path
+	 * @param fileName
+	 * @param is
+	 * @param contentLength
 	 * @throws IOException
-	 * @throws KeyManagementException
-	 * @throws NoSuchAlgorithmException
 	 */
+	private boolean write2File(String path, String fileName, InputStream is,
+			int contentLength, DownloadListener downloadListener) {
+		if (isCancelled)
+			return false;
+		int s = 0;
+		File file = null;
+		OutputStream output = null;
+		if (!path.endsWith(File.separator)) {
+			path = path + File.separator;
+		}
+		File folder = new File(path);
+		if (!folder.exists() || folder.isFile()) {
+			folder.mkdirs();
+		}
+		try {
+			file = new File(path + fileName);
+			if (!file.exists())
+				file.createNewFile();
+			output = new FileOutputStream(file);
+			byte buffer[] = new byte[4096];
+			long lastUpdate = System.currentTimeMillis();
+			int total = 0;
+			while ((s = is.read(buffer)) != -1) {
+				if (isCancelled) {
+					output.close();
+					FileUtil.deleteFile(file);
+					return false;
+				}
+				output.write(buffer, 0, s);
+				total += s;
+				if (System.currentTimeMillis() - lastUpdate > 200) {// 200毫秒回调一次
+					if (downloadListener != null) {
+						downloadListener.onDownloadUpdate(total * 100
+								/ contentLength);
+					}
+					lastUpdate = System.currentTimeMillis();
+				}
+			}
+			output.flush();
+			output.close();
+			is.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			if(output!=null){
+				try {
+					output.flush();
+					output.close();
+					is.close();
+				} catch (Exception ee) {
+				};
+			}
+			FileUtil.deleteFile(file);
+		}
+		return false;
+	}
+
 	private HttpURLConnection openURLConnect(String url)
 			throws MalformedURLException, IOException, KeyManagementException,
 			NoSuchAlgorithmException {
-		int netType = NetworkUtil.getAccessPointType(context);
-		if (netType == NetworkUtil.APN_CMWAP) {
-			SocketAddress sa = new InetSocketAddress(NetworkUtil.getHostIp(),
-					NetworkUtil.getHostPort());
+		int netType = NetworkUtil.getNetworkType(mContext);
+		if (netType == NetworkUtil.TYPE_NET
+				&& !TextUtils.isEmpty(android.net.Proxy.getDefaultHost())) {
+			SocketAddress sa = new InetSocketAddress(
+					android.net.Proxy.getDefaultHost(),
+					android.net.Proxy.getDefaultPort());
 			Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP, sa);
 			if (url.toLowerCase().startsWith("https"))
 				return openHttps(url, proxy);
@@ -230,7 +348,7 @@ public class HttpRequest {
 	}
 
 	/**
-	 * open https connection
+	 * 打开https的连接
 	 * 
 	 * @param url
 	 * @param proxy
@@ -279,6 +397,10 @@ public class HttpRequest {
 		public X509Certificate[] getAcceptedIssuers() {
 			return null;
 		}
+	}
+
+	public interface DownloadListener {
+		public void onDownloadUpdate(int progress);
 	}
 
 }

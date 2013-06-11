@@ -9,7 +9,7 @@ public class TextUtil {
 	 * @param tokens
 	 * @return
 	 */
-	public static String implode(CharSequence delimiter, CharSequence[] tokens) {
+	public static String implode(CharSequence[] tokens, CharSequence delimiter) {
 		StringBuilder sb = new StringBuilder();
 		boolean firstTime = true;
 		for (CharSequence token : tokens) {

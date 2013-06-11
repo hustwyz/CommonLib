@@ -1,7 +1,7 @@
 package im.wyz.common.http;
 
 /**
- * the download callback
+ * 下载文件的回调
  * 
  * @author wyz
  * 
@@ -9,24 +9,24 @@ package im.wyz.common.http;
 public interface DownloadCallback {
 
 	/**
-	 * download start
+	 * 开始下载
 	 */
 	public void onDownloadStart();
 
 	/**
-	 * download success
+	 * 下载成功
 	 */
 	public void onDownloadSuccess();
 
 	/**
-	 * download failed
+	 * 下载失败
 	 * 
 	 * @param errorString
 	 */
-	public void onDownloadFailed(String errorString);
+	public void onDownloadFailed(Exception errorString);
 
 	/**
-	 * update progress
+	 * 下载进度更新
 	 * 
 	 * @param progress
 	 */

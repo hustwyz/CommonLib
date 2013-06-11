@@ -1,6 +1,5 @@
 package im.wyz.common.utils;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
@@ -24,16 +23,14 @@ public abstract class BaseTask<Result, Progress> {
 		FINISHED, RUNNING, PENDDING, CANCELED
 	}
 
-	private Status status = Status.PENDDING;
-
-	Context context;
+	private Status mStatus = Status.PENDDING;
 
 	public final Status getStatus() {
-		return status;
+		return mStatus;
 	}
 
 	public final boolean isRunning() {
-		return status == Status.RUNNING;
+		return mStatus == Status.RUNNING;
 	}
 
 	/**
@@ -76,7 +73,7 @@ public abstract class BaseTask<Result, Progress> {
 	 * @return
 	 */
 	public final boolean isCanceled() {
-		return status == Status.CANCELED;
+		return mStatus == Status.CANCELED;
 	}
 
 	/**
@@ -85,7 +82,7 @@ public abstract class BaseTask<Result, Progress> {
 	public final void cancelTask() {
 		if (!isRunning())
 			return;
-		status = Status.CANCELED;
+		mStatus = Status.CANCELED;
 		Message msg = new Message();
 		msg.what = MSG_CANCELED;
 		handler.sendMessage(msg);
@@ -135,9 +132,9 @@ public abstract class BaseTask<Result, Progress> {
 		onPreTask();
 		new Thread() {
 			public void run() {
-				status = Status.RUNNING;
+				mStatus = Status.RUNNING;
 				onAfterTask(doInBackground());
-				status = Status.FINISHED;
+				mStatus = Status.FINISHED;
 			}
 		}.start();
 	}

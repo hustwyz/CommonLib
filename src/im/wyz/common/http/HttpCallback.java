@@ -1,7 +1,7 @@
 package im.wyz.common.http;
 
 /**
- * http request callback
+ * HTTP请求的回调
  * 
  * @author wyz
  * 
@@ -9,19 +9,19 @@ package im.wyz.common.http;
 public interface HttpCallback {
 
 	/**
-	 * http request starting
+	 * 开始发起HTTP请求
 	 */
 	public void onHttpStart();
 
 	/**
-	 * http request success
+	 * 请求成功
 	 * 
 	 * @param res
 	 */
 	public void onHttpSuccess(String res);
 
 	/**
-	 * http request failed
+	 * 请求失败
 	 * 
 	 * @param exception
 	 */

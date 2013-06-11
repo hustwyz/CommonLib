@@ -21,6 +21,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 public class Util {
@@ -28,14 +29,18 @@ public class Util {
 	public static final String[] weekDays = { "周日", "周一", "周二", "周三", "周四",
 			"周五", "周六" };
 
+	public static Log getLog(Class<?> clazz) {
+		return new Log(clazz);
+	}
+	
 	/**
 	 * 屏幕的宽度
 	 * 
 	 * @param mContext
 	 * @return
 	 */
-	public static int getScreenWidth(Context mContext) {
-		return mContext.getResources().getDisplayMetrics().widthPixels;
+	public static int getScreenWidth(Context context) {
+		return context.getResources().getDisplayMetrics().widthPixels;
 	}
 
 	/**
@@ -44,8 +49,8 @@ public class Util {
 	 * @param mContext
 	 * @return
 	 */
-	public static int getScreenHeight(Context mContext) {
-		return mContext.getResources().getDisplayMetrics().heightPixels;
+	public static int getScreenHeight(Context context) {
+		return context.getResources().getDisplayMetrics().heightPixels;
 	}
 
 	/**
@@ -81,25 +86,34 @@ public class Util {
 	}
 
 	/**
-	 * 获取md5加密后的字符串
+	 * 获取md5加密的值
 	 * 
 	 * @param string
 	 * @return
 	 */
 	public static String md5(String string) {
+		return md5(string, null);
+	}
+
+	/**
+	 * 获取md5加密后的字符串
+	 * 
+	 * @param string
+	 * @param method
+	 *            加密方法:md5或是sha-1
+	 * @return
+	 */
+	public static String md5(String string, String method) {
 		if (string == null || string.trim().length() < 1) {
 			return null;
 		}
-		try {
-			return getMD5(string.getBytes("UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e.getMessage(), e);
+		String m = "md5";
+		if (!TextUtils.isEmpty(method)) {
+			m = method;
 		}
-	}
-
-	private static String getMD5(byte[] source) {
 		try {
-			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			byte[] source = string.getBytes("UTF-8");
+			MessageDigest md5 = MessageDigest.getInstance(m);
 			StringBuffer result = new StringBuffer();
 			for (byte b : md5.digest(source)) {
 				result.append(Integer.toHexString((b & 0xf0) >>> 4));
@@ -107,8 +121,9 @@ public class Util {
 			}
 			return result.toString();
 		} catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	public static void showToast(Context context, int resId) {

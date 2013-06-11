@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
- * upload file
+ * 上传文件的类型
  * 
  * @author wyz
  * 
