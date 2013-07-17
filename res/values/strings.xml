@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">CommonLib</string>
-    
     <!-- SD卡检测 -->
     <string name="download_no_sdcard_dlg_msg">"您的设备没有安装 SD 卡！"</string>
     <string name="download_sdcard_busy_dlg_msg">"您的SD卡正在用于其他用途，请关闭 USB存储设备</string>
