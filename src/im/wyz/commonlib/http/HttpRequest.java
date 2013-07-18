@@ -1,9 +1,9 @@
 package im.wyz.commonlib.http;
 
 import im.wyz.commonlib.R;
-import im.wyz.commonlib.utils.FileUtils;
+import im.wyz.commonlib.utils.FileUtil;
 import im.wyz.commonlib.utils.Log;
-import im.wyz.commonlib.utils.CommonUtils;
+import im.wyz.commonlib.utils.CommonUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,7 +59,7 @@ public class HttpRequest {
 
 	private boolean isCancelled = false;
 
-	private Log log = CommonUtils.getLog(getClass());
+	private Log log = CommonUtil.getLog(getClass());
 
 	public HttpRequest(Context context) {
 		super();
@@ -128,7 +128,7 @@ public class HttpRequest {
 	public Response httpRequest(String url, String method, Bundle params,
 			List<FileItem> files) throws Exception {
 		if (method.equals("GET") && params != null) {
-			String data = CommonUtils.encodeUrl(params);
+			String data = CommonUtil.encodeUrl(params);
 			if (!data.equals("")) {
 				url = url + '?' + data;
 			}
@@ -155,7 +155,7 @@ public class HttpRequest {
 			if (files == null) {
 				if (params != null)
 					conn.getOutputStream().write(
-							CommonUtils.encodeUrl(params).getBytes("UTF-8"));
+							CommonUtil.encodeUrl(params).getBytes("UTF-8"));
 			} else {
 				uploadFile(conn, params, files);
 			}
@@ -294,7 +294,7 @@ public class HttpRequest {
 			while ((s = is.read(buffer)) != -1) {
 				if (isCancelled) {
 					output.close();
-					FileUtils.deleteFile(file);
+					FileUtil.deleteFile(file);
 					return false;
 				}
 				output.write(buffer, 0, s);
@@ -322,7 +322,7 @@ public class HttpRequest {
 				}
 				;
 			}
-			FileUtils.deleteFile(file);
+			FileUtil.deleteFile(file);
 		}
 		return false;
 	}

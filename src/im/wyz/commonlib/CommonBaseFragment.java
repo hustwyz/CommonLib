@@ -1,6 +1,6 @@
 package im.wyz.commonlib;
 
-import im.wyz.commonlib.utils.CommonUtils;
+import im.wyz.commonlib.utils.CommonUtil;
 import im.wyz.commonlib.utils.Log;
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 
 public class CommonBaseFragment extends Fragment{
 	
-	Log log = CommonUtils.getLog(getClass());
+	Log log = CommonUtil.getLog(getClass());
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

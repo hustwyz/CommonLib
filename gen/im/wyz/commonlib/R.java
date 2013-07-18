@@ -9,26 +9,29 @@ package im.wyz.commonlib;
 
 public final class R {
     public static final class anim {
-        public static int in_from_center=0x7f020000;
-        public static int in_from_right=0x7f020001;
-        public static int out_to_center=0x7f020002;
-        public static int out_to_right=0x7f020003;
+        public static int in_from_center=0x7f030000;
+        public static int in_from_right=0x7f030001;
+        public static int out_to_center=0x7f030002;
+        public static int out_to_right=0x7f030003;
     }
     public static final class attr {
+    }
+    public static final class drawable {
+        public static int wallpaper_bg=0x7f020000;
     }
     public static final class string {
         /**  SD卡检测 
          */
-        public static int download_no_sdcard_dlg_msg=0x7f030000;
-        public static int download_sdcard_busy_dlg_msg=0x7f030001;
-        public static int http_error_bad_network=0x7f030004;
-        public static int http_error_error_bad_url=0x7f030007;
-        public static int http_error_error_netowrk=0x7f030006;
+        public static int download_no_sdcard_dlg_msg=0x7f040000;
+        public static int download_sdcard_busy_dlg_msg=0x7f040001;
+        public static int http_error_bad_network=0x7f040004;
+        public static int http_error_error_bad_url=0x7f040007;
+        public static int http_error_error_netowrk=0x7f040006;
         /**  网络连接错误提示 
          */
-        public static int http_error_nonetwork=0x7f030002;
-        public static int http_error_server_error=0x7f030005;
-        public static int http_error_unknowhost=0x7f030003;
-        public static int http_error_unknown=0x7f030008;
+        public static int http_error_nonetwork=0x7f040002;
+        public static int http_error_server_error=0x7f040005;
+        public static int http_error_unknowhost=0x7f040003;
+        public static int http_error_unknown=0x7f040008;
     }
 }

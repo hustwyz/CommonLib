@@ -1,6 +1,6 @@
 package im.wyz.commonlib;
 
-import im.wyz.commonlib.utils.CommonUtils;
+import im.wyz.commonlib.utils.CommonUtil;
 import im.wyz.commonlib.utils.Log;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.view.KeyEvent;
 
 public class CommonBaseActivity extends Activity{
 	
-	Log log = CommonUtils.getLog(getClass());
+	Log log = CommonUtil.getLog(getClass());
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class CommonBaseActivity extends Activity{
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(event.getKeyCode() == KeyEvent.KEYCODE_BACK){
-			CommonUtils.finishActivity(this);
+			CommonUtil.finishActivity(this);
 		}
 		return super.onKeyDown(keyCode, event);
 	}

@@ -3,7 +3,7 @@ package im.wyz.commonlib.http;
 import im.wyz.commonlib.R;
 import im.wyz.commonlib.http.HttpRequest.DownloadListener;
 import im.wyz.commonlib.utils.Log;
-import im.wyz.commonlib.utils.CommonUtils;
+import im.wyz.commonlib.utils.CommonUtil;
 
 import java.io.FileNotFoundException;
 import java.net.SocketException;
@@ -31,7 +31,7 @@ public class HttpHelper {
 	protected static final int MSG_UPDATE = 3;
 	protected static final int MSG_FAIL = 4;
 	
-	protected Log log = CommonUtils.getLog(getClass());
+	protected Log log = CommonUtil.getLog(getClass());
 	protected Context mContext;
 	protected HttpRequest mHttp;
 	
