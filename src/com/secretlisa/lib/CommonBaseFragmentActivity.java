@@ -2,6 +2,7 @@ package com.secretlisa.lib;
 
 import com.secretlisa.lib.utils.CommonUtil;
 import com.secretlisa.lib.utils.Log;
+import com.umeng.analytics.MobclickAgent;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,16 +37,21 @@ public class CommonBaseFragmentActivity extends FragmentActivity {
 		log.i("======onNewIntent======");
 	}
 
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		log.i("======onResume======");
+		if(CommonConfig.UMENG)
+			MobclickAgent.onResume(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		log.i("======onPause======");
+		if(CommonConfig.UMENG)
+			MobclickAgent.onPause(this);
 	}
 
 	@Override

@@ -9,29 +9,158 @@ package com.secretlisa.lib;
 
 public final class R {
     public static final class anim {
-        public static int in_from_center=0x7f030000;
-        public static int in_from_right=0x7f030001;
-        public static int out_to_center=0x7f030002;
-        public static int out_to_right=0x7f030003;
+        public static int in_from_center=0x7f040000;
+        public static int in_from_right=0x7f040001;
+        public static int out_to_center=0x7f040002;
+        public static int out_to_right=0x7f040003;
+        public static int umeng_fb_slide_in_from_left=0x7f040004;
+        public static int umeng_fb_slide_in_from_right=0x7f040005;
+        public static int umeng_fb_slide_out_from_left=0x7f040006;
+        public static int umeng_fb_slide_out_from_right=0x7f040007;
     }
     public static final class attr {
     }
+    public static final class color {
+        public static int umeng_fb_color_btn_normal=0x7f070001;
+        public static int umeng_fb_color_btn_pressed=0x7f070000;
+    }
     public static final class drawable {
-        public static int wallpaper_bg=0x7f020000;
+        public static int umeng_common_gradient_green=0x7f020000;
+        public static int umeng_common_gradient_orange=0x7f020001;
+        public static int umeng_common_gradient_red=0x7f020002;
+        public static int umeng_fb_arrow_right=0x7f020003;
+        public static int umeng_fb_back_normal=0x7f020004;
+        public static int umeng_fb_back_selected=0x7f020005;
+        public static int umeng_fb_back_selector=0x7f020006;
+        public static int umeng_fb_bar_bg=0x7f020007;
+        public static int umeng_fb_btn_bg_selector=0x7f020008;
+        public static int umeng_fb_conversation_bg=0x7f020009;
+        public static int umeng_fb_gradient_green=0x7f02000a;
+        public static int umeng_fb_gradient_orange=0x7f02000b;
+        public static int umeng_fb_gray_frame=0x7f02000c;
+        public static int umeng_fb_list_item=0x7f02000d;
+        public static int umeng_fb_list_item_pressed=0x7f02000e;
+        public static int umeng_fb_list_item_selector=0x7f02000f;
+        public static int umeng_fb_logo=0x7f020010;
+        public static int umeng_fb_point_new=0x7f020011;
+        public static int umeng_fb_point_normal=0x7f020012;
+        public static int umeng_fb_reply_left_bg=0x7f020013;
+        public static int umeng_fb_reply_right_bg=0x7f020014;
+        public static int umeng_fb_see_list_normal=0x7f020015;
+        public static int umeng_fb_see_list_pressed=0x7f020016;
+        public static int umeng_fb_see_list_selector=0x7f020017;
+        public static int umeng_fb_statusbar_icon=0x7f020018;
+        public static int umeng_fb_submit_selector=0x7f020019;
+        public static int umeng_fb_tick_normal=0x7f02001a;
+        public static int umeng_fb_tick_selected=0x7f02001b;
+        public static int umeng_fb_tick_selector=0x7f02001c;
+        public static int umeng_fb_top_banner=0x7f02001d;
+        public static int umeng_fb_user_bubble=0x7f02001e;
+        public static int umeng_fb_write_normal=0x7f02001f;
+        public static int umeng_fb_write_pressed=0x7f020020;
+        public static int umeng_fb_write_selector=0x7f020021;
+        public static int umeng_update_button_cancel_normal=0x7f020022;
+        public static int umeng_update_button_cancel_selector=0x7f020023;
+        public static int umeng_update_button_cancel_tap=0x7f020024;
+        public static int umeng_update_button_ok_normal=0x7f020025;
+        public static int umeng_update_button_ok_selector=0x7f020026;
+        public static int umeng_update_button_ok_tap=0x7f020027;
+        public static int umeng_update_dialog_bg=0x7f020028;
+        public static int umeng_update_title_bg=0x7f020029;
+        public static int umeng_update_wifi_disable=0x7f02002a;
+        public static int wallpaper_bg=0x7f02002b;
+    }
+    public static final class id {
+        public static int umeng_common_app=0x7f080000;
+        public static int umeng_common_appIcon=0x7f080001;
+        public static int umeng_common_description=0x7f080008;
+        public static int umeng_common_notification=0x7f080006;
+        public static int umeng_common_notification_controller=0x7f080003;
+        public static int umeng_common_progress_bar=0x7f080009;
+        public static int umeng_common_progress_text=0x7f080002;
+        public static int umeng_common_rich_notification_cancel=0x7f080005;
+        public static int umeng_common_rich_notification_continue=0x7f080004;
+        public static int umeng_common_title=0x7f080007;
+        public static int umeng_fb_back=0x7f08000b;
+        public static int umeng_fb_contact_header=0x7f08000a;
+        public static int umeng_fb_contact_info=0x7f08000d;
+        public static int umeng_fb_contact_update_at=0x7f08000e;
+        public static int umeng_fb_conversation_contact_entry=0x7f080010;
+        public static int umeng_fb_conversation_header=0x7f08000f;
+        public static int umeng_fb_conversation_list_wrapper=0x7f080011;
+        public static int umeng_fb_conversation_umeng_logo=0x7f080016;
+        public static int umeng_fb_list_reply_header=0x7f080017;
+        public static int umeng_fb_reply_content=0x7f080015;
+        public static int umeng_fb_reply_content_wrapper=0x7f080013;
+        public static int umeng_fb_reply_date=0x7f080018;
+        public static int umeng_fb_reply_list=0x7f080012;
+        public static int umeng_fb_save=0x7f08000c;
+        public static int umeng_fb_send=0x7f080014;
+        public static int umeng_update_content=0x7f08001a;
+        public static int umeng_update_id_cancel=0x7f08001c;
+        public static int umeng_update_id_ok=0x7f08001b;
+        public static int umeng_update_wifi_indicator=0x7f080019;
+    }
+    public static final class layout {
+        public static int umeng_common_download_notification=0x7f030000;
+        public static int umeng_fb_activity_contact=0x7f030001;
+        public static int umeng_fb_activity_conversation=0x7f030002;
+        public static int umeng_fb_list_header=0x7f030003;
+        public static int umeng_fb_list_item=0x7f030004;
+        public static int umeng_fb_new_reply_alert_dialog=0x7f030005;
+        public static int umeng_update_dialog=0x7f030006;
     }
     public static final class string {
+        public static int UMAppUpdate=0x7f050027;
+        public static int UMBreak_Network=0x7f05001f;
+        public static int UMDialog_InstallAPK=0x7f05002a;
+        public static int UMGprsCondition=0x7f050025;
+        public static int UMNewVersion=0x7f050021;
+        public static int UMNotNow=0x7f050028;
+        public static int UMTargetSize=0x7f050024;
+        public static int UMToast_IsUpdating=0x7f050029;
+        public static int UMUpdateContent=0x7f050022;
+        public static int UMUpdateNow=0x7f050026;
+        public static int UMUpdateSize=0x7f050023;
+        public static int UMUpdateTitle=0x7f050020;
         /**  SD卡检测 
          */
-        public static int download_no_sdcard_dlg_msg=0x7f040000;
-        public static int download_sdcard_busy_dlg_msg=0x7f040001;
-        public static int http_error_bad_network=0x7f040004;
-        public static int http_error_error_bad_url=0x7f040007;
-        public static int http_error_error_netowrk=0x7f040006;
+        public static int download_no_sdcard_dlg_msg=0x7f050000;
+        public static int download_sdcard_busy_dlg_msg=0x7f050001;
+        public static int http_error_bad_network=0x7f050004;
+        public static int http_error_error_bad_url=0x7f050007;
+        public static int http_error_error_netowrk=0x7f050006;
         /**  网络连接错误提示 
          */
-        public static int http_error_nonetwork=0x7f040002;
-        public static int http_error_server_error=0x7f040005;
-        public static int http_error_unknowhost=0x7f040003;
-        public static int http_error_unknown=0x7f040008;
+        public static int http_error_nonetwork=0x7f050002;
+        public static int http_error_server_error=0x7f050005;
+        public static int http_error_unknowhost=0x7f050003;
+        public static int http_error_unknown=0x7f050008;
+        public static int umeng_common_action_cancel=0x7f05000d;
+        public static int umeng_common_action_continue=0x7f05000c;
+        public static int umeng_common_action_info_exist=0x7f050009;
+        public static int umeng_common_action_pause=0x7f05000b;
+        public static int umeng_common_download_failed=0x7f050010;
+        public static int umeng_common_download_notification_prefix=0x7f05000e;
+        public static int umeng_common_info_interrupt=0x7f05000a;
+        public static int umeng_common_network_break_alert=0x7f05000f;
+        public static int umeng_fb_back=0x7f050013;
+        public static int umeng_fb_contact_info=0x7f050016;
+        public static int umeng_fb_contact_info_hint=0x7f050011;
+        public static int umeng_fb_contact_title=0x7f050015;
+        public static int umeng_fb_contact_update_at=0x7f050012;
+        public static int umeng_fb_notification_content_formatter_multiple_msg=0x7f05001e;
+        public static int umeng_fb_notification_content_formatter_single_msg=0x7f05001d;
+        public static int umeng_fb_notification_ticker_text=0x7f05001c;
+        public static int umeng_fb_powered_by=0x7f05001b;
+        public static int umeng_fb_reply_content_default=0x7f050019;
+        public static int umeng_fb_reply_content_hint=0x7f050017;
+        public static int umeng_fb_reply_date_default=0x7f05001a;
+        public static int umeng_fb_send=0x7f050018;
+        public static int umeng_fb_title=0x7f050014;
+    }
+    public static final class style {
+        public static int NotificationText=0x7f060000;
+        public static int NotificationTitle=0x7f060001;
     }
 }
