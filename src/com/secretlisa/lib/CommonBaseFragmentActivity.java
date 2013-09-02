@@ -11,7 +11,7 @@ import android.view.KeyEvent;
 
 public class CommonBaseFragmentActivity extends FragmentActivity {
 
-	Log log = CommonUtil.getLog(getClass());
+	protected Log log = CommonUtil.getLog(getClass());
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

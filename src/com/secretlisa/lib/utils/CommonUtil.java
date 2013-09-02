@@ -261,6 +261,7 @@ public class CommonUtil {
 			}
 			sb.append(key + "=" + URLEncoder.encode(parameters.getString(key)));
 		}
+		Log.d("CommonUtil", sb.toString());
 		return sb.toString();
 	}
 

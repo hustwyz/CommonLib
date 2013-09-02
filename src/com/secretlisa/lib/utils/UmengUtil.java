@@ -17,7 +17,7 @@ public class UmengUtil {
 	 * @param event
 	 */
 	public static void onUmengEvent(Context context, String event) {
-		if (CommonConfig.DEBUG)
+		if (CommonConfig.UMENG)
 			MobclickAgent.onEvent(context, event);
 	}
 
@@ -30,17 +30,17 @@ public class UmengUtil {
 	 */
 	public static void onUmengEvent(Context context, String event,
 			HashMap<String, String> map) {
-		if (CommonConfig.DEBUG)
+		if (CommonConfig.UMENG)
 			MobclickAgent.onEvent(context, event, map);
 	}
 	
 	public static void onUmengEventBegin(Context context, String event) {
-		if (CommonConfig.DEBUG)
+		if (CommonConfig.UMENG)
 			MobclickAgent.onEventBegin(context, event);
 	}
 	
 	public static void onUmengEventEnd(Context context, String event) {
-		if (CommonConfig.DEBUG)
+		if (CommonConfig.UMENG)
 			MobclickAgent.onEventEnd(context, event);
 	}
 	

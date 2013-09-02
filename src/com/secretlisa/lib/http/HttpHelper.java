@@ -159,7 +159,7 @@ public class HttpHelper {
 							res.getString());
 					httpHandler.sendMessage(msgSuccess);
 				} catch (UnknownHostException e) {
-					log.d(e.getClass().getName() + ":" + e.getMessage());
+					e.printStackTrace();
 					Message msgFailed = httpHandler.obtainMessage(
 							MSG_FAIL,
 							new SecretLisaException(mContext
@@ -167,7 +167,7 @@ public class HttpHelper {
 									SecretLisaException.NETWORK_UNKNOWNHOST));
 					httpHandler.sendMessage(msgFailed);
 				} catch (SocketTimeoutException e) {
-					log.d(e.getClass().getName() + ":" + e.getMessage());
+					e.printStackTrace();
 					Message msgFailed = httpHandler
 							.obtainMessage(
 									MSG_FAIL,
@@ -176,7 +176,7 @@ public class HttpHelper {
 											SecretLisaException.NETWORK_BAD));
 					httpHandler.sendMessage(msgFailed);
 				} catch (ConnectTimeoutException e) {
-					log.d(e.getClass().getName() + ":" + e.getMessage());
+					e.printStackTrace();
 					Message msgFailed = httpHandler
 							.obtainMessage(
 									MSG_FAIL,
@@ -185,7 +185,7 @@ public class HttpHelper {
 											SecretLisaException.NETWORK_BAD));
 					httpHandler.sendMessage(msgFailed);
 				} catch (SocketException e) {
-					log.d(e.getClass().getName() + ":" + e.getMessage());
+					e.printStackTrace();
 					Message msgFailed = httpHandler
 							.obtainMessage(
 									MSG_FAIL,
@@ -194,7 +194,7 @@ public class HttpHelper {
 											SecretLisaException.NETWORK_ERROR));
 					httpHandler.sendMessage(msgFailed);
 				} catch (FileNotFoundException e) {
-					log.d(e.getClass().getName() + ":" + e.getMessage());
+					e.printStackTrace();
 					Message msgFailed = httpHandler
 							.obtainMessage(
 									MSG_FAIL,
@@ -203,10 +203,11 @@ public class HttpHelper {
 											SecretLisaException.NETWORK_BAD_URL));
 					httpHandler.sendMessage(msgFailed);
 				} catch (SecretLisaException e) {
+					e.printStackTrace();
 					Message msgFailed = httpHandler.obtainMessage(MSG_FAIL, e);
 					httpHandler.sendMessage(msgFailed);
 				} catch (Exception e) {
-					log.d(e.getClass().getName() + ":" + e.getMessage());
+					e.printStackTrace();
 					Message msgFailed = httpHandler.obtainMessage(
 							MSG_FAIL,
 							new SecretLisaException(mContext

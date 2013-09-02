@@ -13,19 +13,44 @@ import java.io.IOException;
  * 
  */
 public class FileItem {
-
+	
+	public static final String IMAGE_PNG = "image/png";
+	
+	public static final String IMAGE_JPG = "image/jpg";
+	
+	public static final String IMAGE_JPEG = "image/jpeg";
+	
+	public static final String IMAGE_GIF = "image/gif";
+	
+	public static final String IMAGE_BMP = "image/bmp";
+	
+	public static final String APPLICATION_DOC = "application/msword";
+	
+	public static final String APPLICATION_XLS = "application/vnd.ms-excel";
+	
+	public static final String AUDIO_MPEG = "audio/mpeg";
+	
+	public static final String AUDIO_WAV = "audio/x_wav";
+	
+	public static final String AUDIO_MP3 = "audio/mpeg";
+	
+	public static final String TEXT_PLAIN = "'text/plain";
+	
 	private File file;
 
-	private String fileName;
-
 	private String paramName;
+	
+	private String contentType;
 
 	public FileItem(String path, String paramName) {
 		this.file = new File(path);
-		this.fileName = getName();
 		this.paramName = paramName;
 	}
-
+	
+	public void seContentType(String contentType){
+		this.contentType = contentType;
+	}
+	
 	public String getName() {
 		return file.getName();
 	}
@@ -39,20 +64,6 @@ public class FileItem {
 	}
 
 	public String getContentType() {
-		String contentType = "image/jpg";
-		fileName = fileName.toLowerCase();
-		if (fileName.endsWith(".jpg"))
-			contentType = "image/jpg";
-		else if (fileName.endsWith(".png"))
-			contentType = "image/png";
-		else if (fileName.endsWith(".jpeg"))
-			contentType = "image/jpeg";
-		else if (fileName.endsWith(".gif"))
-			contentType = "image/gif";
-		else if (fileName.endsWith(".bmp"))
-			contentType = "image/bmp";
-		else
-			throw new RuntimeException("不支持的文件类型'" + fileName + "'(或没有文件扩展名)");
 		return contentType;
 	}
 
