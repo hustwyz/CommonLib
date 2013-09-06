@@ -24,7 +24,7 @@ public class Cache {
 
 	private static final int CACHE_DB_VERSION = 1;
 
-	private static final String CREATE_SQL = "CREATE TABLE cache_table ( _id  INTEGER PRIMARY KEY AUTOINCREMENT , cache_key TEXT , cache_value TEXT )";
+	private static final String CREATE_SQL = "CREATE TABLE cache_table ( _id INTEGER PRIMARY KEY AUTOINCREMENT , cache_key TEXT , cache_value TEXT )";
 
 	private static Cache cache;
 
@@ -61,7 +61,6 @@ public class Cache {
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
 		}
 
 	}
@@ -138,8 +137,7 @@ public class Cache {
 	 * @return
 	 */
 	public int getPrefInt(String key, int defaultValue) {
-		Cursor cursor = mSqliteDb.rawQuery("SELECT " + CACHE_VALUE + " FROM "
-				+ CACHE_TABLE + " WHERE " + CACHE_KEY + " = ? ",
+		Cursor cursor = mSqliteDb.rawQuery("SELECT cache_value FROM cache_table WHERE cache_key = ?",
 				new String[] { key });
 		if (cursor == null)
 			return defaultValue;
@@ -159,8 +157,7 @@ public class Cache {
 	 * @return
 	 */
 	public boolean getPrefBoolean(String key, boolean defaultValue) {
-		Cursor cursor = mSqliteDb.rawQuery("SELECT " + CACHE_VALUE + " FROM "
-				+ CACHE_TABLE + " WHERE " + CACHE_KEY + " = ? ",
+		Cursor cursor = mSqliteDb.rawQuery("SELECT cache_value FROM cache_table WHERE cache_key = ?",
 				new String[] { key });
 		if (cursor == null)
 			return defaultValue;
@@ -184,8 +181,7 @@ public class Cache {
 	 * @return
 	 */
 	public String getPrefString(String key, String defaultValue) {
-		Cursor cursor = mSqliteDb.rawQuery("SELECT " + CACHE_VALUE + " FROM "
-				+ CACHE_TABLE + " WHERE " + CACHE_KEY + " = ? ",
+		Cursor cursor = mSqliteDb.rawQuery("SELECT cache_value FROM cache_table WHERE cache_key = ?",
 				new String[] { key });
 		if (cursor == null)
 			return defaultValue;
@@ -205,8 +201,7 @@ public class Cache {
 	 * @return
 	 */
 	public long getPrefLong(String key, long defaultValue) {
-		Cursor cursor = mSqliteDb.rawQuery("SELECT " + CACHE_VALUE + " FROM "
-				+ CACHE_TABLE + " WHERE " + CACHE_KEY + " = ? ",
+		Cursor cursor = mSqliteDb.rawQuery("SELECT cache_value FROM cache_table WHERE cache_key = ?",
 				new String[] { key });
 		if (cursor == null)
 			return defaultValue;
@@ -238,8 +233,7 @@ public class Cache {
 	private boolean keyExist(String key) {
 		boolean exist = false;
 		try {
-			Cursor cursor = mSqliteDb.rawQuery("SELECT * FROM " + CACHE_TABLE
-					+ " WHERE " + CACHE_KEY + " = ? ", new String[] { key });
+			Cursor cursor = mSqliteDb.rawQuery("SELECT _id FROM cache_table WHERE cache_key = ?", new String[] { key });
 			if (cursor != null && cursor.getCount() > 0) {
 				exist = true;
 			}
