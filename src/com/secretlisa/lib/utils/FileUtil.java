@@ -3,10 +3,12 @@ package com.secretlisa.lib.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.MessageDigest;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -20,6 +22,9 @@ import com.secretlisa.lib.CommonConfig;
 import com.secretlisa.lib.R;
 
 public class FileUtil {
+
+	public static char[] hexChar = { '0', '1', '2', '3', '4', '5', '6', '7',
+			'8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	/**
 	 * judge ExternalStorage is valid,show toast if is not valid
@@ -65,7 +70,8 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getExternalStorageDirectory() {
-		String storagePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+		String storagePath = Environment.getExternalStorageDirectory()
+				.getAbsolutePath();
 		if (!storagePath.endsWith(File.separator)) {
 			storagePath = storagePath + File.separator;
 		}
@@ -209,6 +215,41 @@ public class FileUtil {
 	}
 
 	/**
+	 * 获取文件的hash
+	 * 
+	 * @param fileName
+	 * @param hashType
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getHash(String fileName, String hashType){
+		try{
+			InputStream fis;
+			fis = new FileInputStream(fileName);// 读取文件
+			byte[] buffer = new byte[1024];
+			MessageDigest md5 = MessageDigest.getInstance(hashType);
+			int numRead = 0;
+			while ((numRead = fis.read(buffer)) > 0) {
+				md5.update(buffer, 0, numRead);
+			}
+			fis.close();
+			return toHexString(md5.digest());
+		}catch(Exception e){
+			
+		}
+		return null;
+	}
+
+	private static String toHexString(byte[] b) {
+		StringBuilder sb = new StringBuilder(b.length * 2);
+		for (int i = 0; i < b.length; i++) {
+			sb.append(hexChar[(b[i] & 0xf0) >>> 4]);
+			sb.append(hexChar[b[i] & 0x0f]);
+		}
+		return sb.toString();
+	}
+
+	/**
 	 * 解压文件
 	 * 
 	 * @param zipFile
@@ -216,7 +257,8 @@ public class FileUtil {
 	 * @param outfolder
 	 *            解压到的文件夹
 	 */
-	public static boolean unZipFile(String zipFile, String outFolder,UnZipCallback callback) {
+	public static boolean unZipFile(String zipFile, String outFolder,
+			UnZipCallback callback) {
 		if (null == zipFile || null == outFolder)
 			return false;
 		if (zipFile.length() == 0)
@@ -257,8 +299,8 @@ public class FileUtil {
 				is.close();
 				os.flush();
 				os.close();
-				if(callback!=null){
-					callback.update(size,++progress);
+				if (callback != null) {
+					callback.update(size, ++progress);
 				}
 			}
 			zfile.close();
@@ -272,5 +314,5 @@ public class FileUtil {
 		}
 		return false;
 	}
-	
+
 }

@@ -95,7 +95,7 @@ public abstract class BaseImageLoader {
 					imageView.getResources(), task);
 			imageView.setImageDrawable(downloadedDrawable);
 			// imageView.setBackgroundColor(Color.WHITE);
-			imageView.setBackgroundResource(R.drawable.wallpaper_bg);
+//			imageView.setBackgroundResource(R.drawable.wallpaper_bg);
 			imageView.setMinimumHeight(156);
 			task.execute(url);
 		}

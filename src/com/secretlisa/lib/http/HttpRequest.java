@@ -135,7 +135,6 @@ public class HttpRequest {
 		}
 		HttpURLConnection conn;
 		conn = openURLConnect(url);
-		log.d("URL:" + url);
 		log.d("Method:" + method);
 		conn.setConnectTimeout(CONNECT_TIMEOUT);
 		conn.setReadTimeout(READ_TIMEOUT);
@@ -337,15 +336,18 @@ public class HttpRequest {
 					android.net.Proxy.getDefaultHost(),
 					android.net.Proxy.getDefaultPort());
 			Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP, sa);
+			log.d("proxy:"+url);
 			if (url.toLowerCase().startsWith("https"))
 				return openHttps(url, proxy);
 			else
 				return (HttpURLConnection) new URL(url).openConnection(proxy);
 		} else {
-			if (url.toLowerCase().startsWith("https"))
+			log.d("no proxy:"+url);
+			if (url.toLowerCase().startsWith("https")){
 				return openHttps(url, null);
-			else
+			}else{
 				return (HttpURLConnection) new URL(url).openConnection();
+			}
 		}
 	}
 
