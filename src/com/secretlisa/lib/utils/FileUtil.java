@@ -215,6 +215,21 @@ public class FileUtil {
 	}
 
 	/**
+	 * 文件夹是否存在
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public static boolean folderExist(final String path) {
+		if (TextUtils.isEmpty(path))
+			return false;
+		File file = new File(path);
+		if (file.exists() && file.isDirectory())
+			return true;
+		return false;
+	}
+
+	/**
 	 * 获取文件的hash
 	 * 
 	 * @param fileName
@@ -222,8 +237,8 @@ public class FileUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String getHash(String fileName, String hashType){
-		try{
+	public static String getHash(String fileName, String hashType) {
+		try {
 			InputStream fis;
 			fis = new FileInputStream(fileName);// 读取文件
 			byte[] buffer = new byte[1024];
@@ -234,8 +249,8 @@ public class FileUtil {
 			}
 			fis.close();
 			return toHexString(md5.digest());
-		}catch(Exception e){
-			
+		} catch (Exception e) {
+
 		}
 		return null;
 	}

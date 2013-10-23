@@ -22,9 +22,11 @@ public class Cache {
 
 	private static final String CACHE_DB_NAME = "cache_db";
 
-	private static final int CACHE_DB_VERSION = 1;
+	private static final int CACHE_DB_VERSION = 2;
 
 	private static final String CREATE_SQL = "CREATE TABLE cache_table ( _id INTEGER PRIMARY KEY AUTOINCREMENT , cache_key TEXT , cache_value TEXT )";
+	
+	private static final String CREATE_INDEX = "CREATE INDEX IF NOT EXISTS index_cache_key on cache_table(cache_key);";
 
 	private static Cache cache;
 
@@ -57,10 +59,14 @@ public class Cache {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(CREATE_SQL);
+			db.execSQL(CREATE_INDEX);
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			if(oldVersion <= 1){
+				db.execSQL(CREATE_INDEX);
+			}
 		}
 
 	}

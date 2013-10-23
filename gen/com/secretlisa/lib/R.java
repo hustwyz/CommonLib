@@ -10,13 +10,15 @@ package com.secretlisa.lib;
 public final class R {
     public static final class anim {
         public static int in_from_center=0x7f040000;
-        public static int in_from_right=0x7f040001;
-        public static int out_to_center=0x7f040002;
-        public static int out_to_right=0x7f040003;
-        public static int umeng_fb_slide_in_from_left=0x7f040004;
-        public static int umeng_fb_slide_in_from_right=0x7f040005;
-        public static int umeng_fb_slide_out_from_left=0x7f040006;
-        public static int umeng_fb_slide_out_from_right=0x7f040007;
+        public static int in_from_left=0x7f040001;
+        public static int in_from_right=0x7f040002;
+        public static int out_to_center=0x7f040003;
+        public static int out_to_left=0x7f040004;
+        public static int out_to_right=0x7f040005;
+        public static int umeng_fb_slide_in_from_left=0x7f040006;
+        public static int umeng_fb_slide_in_from_right=0x7f040007;
+        public static int umeng_fb_slide_out_from_left=0x7f040008;
+        public static int umeng_fb_slide_out_from_right=0x7f040009;
     }
     public static final class attr {
     }
