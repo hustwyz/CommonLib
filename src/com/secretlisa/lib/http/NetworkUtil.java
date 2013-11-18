@@ -110,7 +110,6 @@ public class NetworkUtil {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			return TYPE_NET;
 		}
 

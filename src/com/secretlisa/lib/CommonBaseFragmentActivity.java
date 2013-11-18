@@ -66,12 +66,12 @@ public class CommonBaseFragmentActivity extends FragmentActivity {
 		log.i("======onDestroy======");
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-			CommonUtil.finishActivity(this);
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+//			CommonUtil.finishActivity(this);
+//		}
+//		return super.onKeyDown(keyCode, event);
+//	}
 
 }

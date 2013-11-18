@@ -1,15 +1,15 @@
 package com.secretlisa.lib;
 
-import com.secretlisa.lib.utils.CommonUtil;
-import com.secretlisa.lib.utils.Log;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.secretlisa.lib.utils.CommonUtil;
+import com.secretlisa.lib.utils.Log;
+
 public class CommonBaseFragment extends Fragment{
 	
-	Log log = CommonUtil.getLog(getClass());
+	protected Log log = CommonUtil.getLog(getClass());
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

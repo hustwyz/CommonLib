@@ -39,17 +39,14 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.secretlisa.lib.R;
 import com.secretlisa.lib.http.HttpRequest;
 import com.secretlisa.lib.http.NetworkUtil;
 import com.secretlisa.lib.http.Response;
@@ -90,14 +87,21 @@ public abstract class BaseImageLoader {
 
 		if (cancelPotentialDownload(url, imageView)) {
 			BitmapDownloaderTask task = null;
-			task = new BitmapDownloaderTask(imageView);
+			task = new BitmapDownloaderTask(imageView,url);
+			Object obj = imageView.getTag();
+			int resId = -1;
+			Bitmap bitmapDefault = null;
+			if(obj != null){
+				resId = (Integer)obj;
+				bitmapDefault = BitmapFactory.decodeResource(imageView.getResources(), resId);
+			}
 			DownloadedDrawable downloadedDrawable = new DownloadedDrawable(
-					imageView.getResources(), task);
+					bitmapDefault, task);
 			imageView.setImageDrawable(downloadedDrawable);
 			// imageView.setBackgroundColor(Color.WHITE);
 //			imageView.setBackgroundResource(R.drawable.wallpaper_bg);
 			imageView.setMinimumHeight(156);
-			task.execute(url);
+			task.execute();
 		}
 	}
 
@@ -107,7 +111,7 @@ public abstract class BaseImageLoader {
 		if (bitmapDownloaderTask != null) {
 			String bitmapUrl = bitmapDownloaderTask.imageUrl;
 			if ((bitmapUrl == null) || (!bitmapUrl.equals(url))) {
-				bitmapDownloaderTask.cancel(true);
+				bitmapDownloaderTask.cancelTask();
 			} else {
 				return false;
 			}
@@ -127,7 +131,7 @@ public abstract class BaseImageLoader {
 		return null;
 	}
 
-	private Bitmap downloadBitmap(final String imageUrl) {
+	public Bitmap downloadBitmap(final String imageUrl) {
 		// AndroidHttpClient is not allowed to be used from the main thread
 		final HttpClient client = new DefaultHttpClient();
 		// 代理支持
@@ -175,7 +179,7 @@ public abstract class BaseImageLoader {
 		return null;
 	}
 
-	private Bitmap downloadBitmapFromWeb(String imageUrl) {
+	public Bitmap downloadBitmapFromWeb(String imageUrl) {
 		HttpRequest request = new HttpRequest(mContext);
 		Response response = null;
 		try {
@@ -247,28 +251,23 @@ public abstract class BaseImageLoader {
 	/**
 	 * The actual AsyncTask that will asynchronously download the image.
 	 */
-	class BitmapDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+	class BitmapDownloaderTask extends BaseTask<Bitmap, String> {
 		private String imageUrl;
 		private final WeakReference<ImageView> imageViewReference;
 
-		public BitmapDownloaderTask(ImageView imageView) {
+		public BitmapDownloaderTask(ImageView imageView,String url) {
 			imageViewReference = new WeakReference<ImageView>(imageView);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
+			imageUrl = url;
 		}
 
 		/**
 		 * Actual download method.
 		 */
 		@Override
-		protected Bitmap doInBackground(String... params) {
-			if (isCancelled()) {
+		protected Bitmap doInBackground() {
+			if (isCanceled()) {
 				return null;
 			}
-			imageUrl = params[0];
 			if (!TextUtils.isEmpty(imageUrl)) {
 				// first look from local file.
 				Bitmap bitmap = getBitmapFromCacheFile(imageUrl);
@@ -292,7 +291,8 @@ public abstract class BaseImageLoader {
 		 * Once the image is downloaded, associates it to the imageView
 		 */
 		@Override
-		protected void onPostExecute(Bitmap bitmap) {
+		protected void onPostTask(Bitmap bitmap) {
+			super.onPostTask(bitmap);
 			if (bitmap == null) {
 				return;
 			}
@@ -308,6 +308,12 @@ public abstract class BaseImageLoader {
 				}
 			}
 		}
+
+		@Override
+		protected void onPreTask() {
+			super.onPreTask();
+		}
+
 	}
 
 	/**
@@ -325,9 +331,9 @@ public abstract class BaseImageLoader {
 
 		private final WeakReference<BitmapDownloaderTask> bitmapDownloaderTaskReference;
 
-		public DownloadedDrawable(Resources res,
+		public DownloadedDrawable(Bitmap bitmap,
 				BitmapDownloaderTask bitmapDownloaderTask) {
-			// super(BitmapFactory.decodeResource(res, R.drawable.back));
+			super(bitmap);
 			bitmapDownloaderTaskReference = new WeakReference<BitmapDownloaderTask>(
 					bitmapDownloaderTask);
 		}

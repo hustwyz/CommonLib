@@ -49,9 +49,11 @@ public class HttpRequest {
 
 	public static final int RETRYCOUNT = 1;
 
-	public static final int CONNECT_TIMEOUT = 20000;
+	public static final int CONNECT_TIMEOUT = 10000;
 
 	public static final int READ_TIMEOUT = 20000;
+	
+	public static final int RETRY_TIMES = 3;
 
 	public Context mContext;
 
@@ -133,36 +135,56 @@ public class HttpRequest {
 				url = url + '?' + data;
 			}
 		}
-		HttpURLConnection conn;
-		conn = openURLConnect(url);
-		log.d("Method:" + method);
-		conn.setConnectTimeout(CONNECT_TIMEOUT);
-		conn.setReadTimeout(READ_TIMEOUT);
-		conn.setDoInput(true);
-		conn.setRequestMethod(method);
-		// 添加头部
-		if (mHeads != null) {
-			for (Iterator<String> i = mHeads.keySet().iterator(); i.hasNext();) {
-				String name = i.next();
-				String value = mHeads.getString(name);
-				conn.setRequestProperty(name, value);
-				log.d("Head:name=" + name + ";value=" + value);
+		HttpURLConnection conn = null;
+		for(int i = 0 ; i < RETRY_TIMES ; i++){
+			try{
+				conn = openURLConnect(url);
+				log.d("Method:" + method);
+				conn.setConnectTimeout(CONNECT_TIMEOUT);
+				conn.setReadTimeout(READ_TIMEOUT);
+				conn.setDoInput(true);
+				conn.setUseCaches(false);
+				conn.setRequestMethod(method);
+				conn.setRequestProperty("Connection","Keep-Alive");
+				conn.setRequestProperty("Accept-Encoding", "gzip");
+				
+				// 添加头部
+				if (mHeads != null) {
+					for (Iterator<String> iterator = mHeads.keySet().iterator(); iterator.hasNext();) {
+						String name = iterator.next();
+						String value = mHeads.getString(name);
+						conn.setRequestProperty(name, value);
+						log.d("Head:name=" + name + ";value=" + value);
+					}
+				}
+				if (method.equals("POST")) {
+					conn.setDoOutput(true);
+					if (files == null) {
+						if (params != null)
+							conn.getOutputStream().write(
+									CommonUtil.encodeUrl(params).getBytes("UTF-8"));
+					} else {
+						uploadFile(conn, params, files);
+					}
+				}
+				log.d("connecting time:"+i);
+				conn.connect();
+				break;
+			}catch(Exception e){
+				e.printStackTrace();
+				if(i >= RETRY_TIMES -1){
+					throw new SecretLisaException(mContext.getString(
+							R.string.http_error_unknowhost,
+							SecretLisaException.NETWORK_UNKNOWNHOST));
+				}else{
+					continue;
+				}
 			}
 		}
-		if (method.equals("POST")) {
-			conn.setDoOutput(true);
-			if (files == null) {
-				if (params != null)
-					conn.getOutputStream().write(
-							CommonUtil.encodeUrl(params).getBytes("UTF-8"));
-			} else {
-				uploadFile(conn, params, files);
-			}
-		}
-		Response res = new Response(conn);
-		int statusCode = res.getStatusCode();
+		int statusCode = conn.getResponseCode();
+		log.d("response code:" + statusCode);
 		if (statusCode == OK) {
-			return res;
+			return new Response(conn);
 		} else if (statusCode >= HttpRequest.SERVER_ERROR) {
 			throw new SecretLisaException(mContext.getString(
 					R.string.http_error_server_error,
