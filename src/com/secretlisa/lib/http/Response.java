@@ -32,7 +32,10 @@ public class Response {
         String encoding = con.getContentEncoding();
         this.statusCode = con.getResponseCode();
         if (null != encoding && encoding.toLowerCase().indexOf("gzip") > -1) {
+        	Log.d("Response", "gzip");
             this.is = new GZIPInputStream(this.is);
+        }else{
+        	Log.d("Response", "not gzip");
         }
     }
     

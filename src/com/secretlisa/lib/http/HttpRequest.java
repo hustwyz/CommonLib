@@ -18,6 +18,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -34,6 +35,7 @@ import com.secretlisa.lib.R;
 import com.secretlisa.lib.utils.CommonUtil;
 import com.secretlisa.lib.utils.FileUtil;
 import com.secretlisa.lib.utils.Log;
+import com.squareup.okhttp.OkHttpClient;
 
 /**
  * 网络请求的类
@@ -47,13 +49,11 @@ public class HttpRequest {
 
 	public static final int SERVER_ERROR = 500;
 
-	public static final int RETRYCOUNT = 1;
+	public static final int CONNECT_TIMEOUT = 10;
 
-	public static final int CONNECT_TIMEOUT = 10000;
+	public static final int READ_TIMEOUT = 25;
 
-	public static final int READ_TIMEOUT = 20000;
-	
-	public static final int RETRY_TIMES = 3;
+	public static final int RETRY_TIMES = 1;
 
 	public Context mContext;
 
@@ -136,21 +136,22 @@ public class HttpRequest {
 			}
 		}
 		HttpURLConnection conn = null;
-		for(int i = 0 ; i < RETRY_TIMES ; i++){
-			try{
-				conn = openURLConnect(url);
+		for (int i = 0; i < RETRY_TIMES; i++) {
+			try {
+				OkHttpClient client = new OkHttpClient();
+				client.setConnectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS);
+				client.setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
+				conn = client.open(new URL(url));
+				log.d("url:" + url);
 				log.d("Method:" + method);
-				conn.setConnectTimeout(CONNECT_TIMEOUT);
-				conn.setReadTimeout(READ_TIMEOUT);
-				conn.setDoInput(true);
-				conn.setUseCaches(false);
 				conn.setRequestMethod(method);
-				conn.setRequestProperty("Connection","Keep-Alive");
+				conn.setDoInput(true);
 				conn.setRequestProperty("Accept-Encoding", "gzip");
-				
+
 				// 添加头部
 				if (mHeads != null) {
-					for (Iterator<String> iterator = mHeads.keySet().iterator(); iterator.hasNext();) {
+					for (Iterator<String> iterator = mHeads.keySet().iterator(); iterator
+							.hasNext();) {
 						String name = iterator.next();
 						String value = mHeads.getString(name);
 						conn.setRequestProperty(name, value);
@@ -162,21 +163,24 @@ public class HttpRequest {
 					if (files == null) {
 						if (params != null)
 							conn.getOutputStream().write(
-									CommonUtil.encodeUrl(params).getBytes("UTF-8"));
+									CommonUtil.encodeUrl(params).getBytes(
+											"UTF-8"));
 					} else {
 						uploadFile(conn, params, files);
 					}
 				}
-				log.d("connecting time:"+i);
+
+				log.d("connecting time:" + i);
+
 				conn.connect();
 				break;
-			}catch(Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
-				if(i >= RETRY_TIMES -1){
+				if (i >= RETRY_TIMES - 1) {
 					throw new SecretLisaException(mContext.getString(
 							R.string.http_error_unknowhost,
 							SecretLisaException.NETWORK_UNKNOWNHOST));
-				}else{
+				} else {
 					continue;
 				}
 			}
@@ -358,16 +362,16 @@ public class HttpRequest {
 					android.net.Proxy.getDefaultHost(),
 					android.net.Proxy.getDefaultPort());
 			Proxy proxy = new Proxy(java.net.Proxy.Type.HTTP, sa);
-			log.d("proxy:"+url);
+			log.d("proxy:" + url);
 			if (url.toLowerCase().startsWith("https"))
 				return openHttps(url, proxy);
 			else
 				return (HttpURLConnection) new URL(url).openConnection(proxy);
 		} else {
-			log.d("no proxy:"+url);
-			if (url.toLowerCase().startsWith("https")){
+			log.d("no proxy:" + url);
+			if (url.toLowerCase().startsWith("https")) {
 				return openHttps(url, null);
-			}else{
+			} else {
 				return (HttpURLConnection) new URL(url).openConnection();
 			}
 		}
