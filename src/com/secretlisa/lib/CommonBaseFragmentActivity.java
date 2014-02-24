@@ -1,13 +1,12 @@
 package com.secretlisa.lib;
 
-import com.secretlisa.lib.utils.CommonUtil;
-import com.secretlisa.lib.utils.Log;
-import com.umeng.analytics.MobclickAgent;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
+
+import com.secretlisa.lib.utils.CommonUtil;
+import com.secretlisa.lib.utils.Log;
+import com.umeng.analytics.MobclickAgent;
 
 public class CommonBaseFragmentActivity extends FragmentActivity {
 

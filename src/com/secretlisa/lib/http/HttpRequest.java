@@ -177,9 +177,7 @@ public class HttpRequest {
 			} catch (Exception e) {
 				e.printStackTrace();
 				if (i >= RETRY_TIMES - 1) {
-					throw new SecretLisaException(mContext.getString(
-							R.string.http_error_unknowhost,
-							SecretLisaException.NETWORK_UNKNOWNHOST));
+					throw e;
 				} else {
 					continue;
 				}
@@ -188,6 +186,14 @@ public class HttpRequest {
 		int statusCode = conn.getResponseCode();
 		log.d("response code:" + statusCode);
 		if (statusCode == OK) {
+//			Map<String , List<String>> heads = conn.getHeaderFields();
+//			Set<String> keys = heads.keySet();
+//			for(String key : keys){
+//				List<String> list = heads.get(key);
+//				for(String data : list){
+//					log.d(key+"="+data);
+//				}
+//			}
 			return new Response(conn);
 		} else if (statusCode >= HttpRequest.SERVER_ERROR) {
 			throw new SecretLisaException(mContext.getString(
